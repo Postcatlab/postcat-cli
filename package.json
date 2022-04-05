@@ -1,0 +1,24 @@
+{
+  "name": "eo-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "eo": "index.js"
+  },
+  "scripts": {},
+  "keywords": [
+    "eolinker",
+    "cli"
+  ],
+  "author": "eolinker",
+  "license": "ISC",
+  "engines": {
+    "node": ">=14.16"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^9.1.0",
+    "got": "^11.8.3"
+  }
+}
