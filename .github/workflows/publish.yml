@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
-          scope: "@eolink"
+          scope: "@eoapi"
 
       - name: "Publish to the npm registry"
         uses: primer/publish@3.0.0
