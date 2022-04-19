@@ -1,0 +1,6 @@
+node_modules
+.gitignore
+*-lock.*
+.Ds_Store
+.vscode
+.idea

@@ -1,0 +1,23 @@
+name: Public Npm
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    name: "publish npm"
+
+    environment: npm
+
+    steps:
+      - uses: actions/checkout@main
+
+      - name: "Publish to the npm registry"
+        uses: primer/publish@3.0.0
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.npm_token }}
+        with:
+          default_branch: "main"

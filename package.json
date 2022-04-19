@@ -11,7 +11,7 @@
     "eolinker",
     "cli"
   ],
-  "author": "eolinker",
+  "author": "eolink",
   "license": "ISC",
   "engines": {
     "node": ">=14.16"
