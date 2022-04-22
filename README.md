@@ -24,7 +24,7 @@ The commad will generate a folder includes base config files, let you could crea
 eo upload <plugin name>
 ```
 
-If your plugin name format is `eo-module-foo`, of course you can input `eo upload eo-module-foo`, or you can just input `eo upload foo`, the cli will trying to search the plugin that name is `eo-module-` prefix.
+If your plugin name format is `eoapi-foo`, of course you can input `eo upload eoapi-foo`, or you can just input `eo upload foo`, the cli will trying to search the plugin that name is `eoapi-` prefix.
 
 If your plugin name is other style that like `foo-app`, you need to add `-f` option.
 `eo upload foo-app -f`

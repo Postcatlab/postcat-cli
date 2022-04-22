@@ -37,8 +37,8 @@ program
   .argument("<name>", "module name")
   .description("create a module template.")
   .action((name) => {
-    if (!/^eo-module-/.test(name)) {
-      name = "eo-module-" + name;
+    if (!/^eoapi-/.test(name)) {
+      name = "eoapi-" + name;
     }
     const _path = path.join(process.cwd(), name);
     ensureDir(_path);
@@ -61,8 +61,8 @@ program
   .option("-f, --full", "full name")
   .description("Upload the plugin message to plugin market.")
   .action(async (pkgName, { full }) => {
-    if (!full && !/^eo-module-/.test(pkgName)) {
-      pkgName = "eo-module-" + pkgName;
+    if (!full && !/^eoapi-/.test(pkgName)) {
+      pkgName = "eoapi-" + pkgName;
     }
     const _path = path.join(process.cwd(), pkgName);
     const packageJson = fs.readFileSync(`${_path}/package.json`, "utf8");
