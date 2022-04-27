@@ -66,17 +66,18 @@ program
     }
     const _path = path.join(process.cwd(), pkgName);
     const packageJson = fs.readFileSync(`${_path}/package.json`, "utf8");
-    const { name, version, main, author, description } =
-      JSON.parse(packageJson);
-    console.log("=>", HOST + "/upload");
+    const json = JSON.parse(packageJson);
     const { code, msg } = await http
       .post(HOST + "/upload", {
-        json: { name, version, main, author, description }
+        json: json
       })
       .json();
-    if (code === 0) {
-      console.log("🥂", msg);
+
+    if (code !== 0) {
+      console.log("😂", msg);
+      return;
     }
+    console.log("🥂", msg);
   });
 
 program
