@@ -30,14 +30,17 @@ const template = {
   genPackageJSON: (name) =>
     `{
   "name": "${name}",
+  "author": "Eolink",
   "version": "1.0.0",
-  "description": "A ${name} module of EOAPI-Core.",
+  "description": "A ${name} module of EoApi.",
+  "moduleID": "${name}",
+  "moduleName": "${name}",
+  "type": "feature",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \\"Error: no test specified\\"",
     "build": "tsc"
   },
-  "author": "Eolink",
   "license": "Apache-2.0 License",
   "devDependencies": {
     "@types/node": "^17.0.10"

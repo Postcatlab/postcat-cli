@@ -58,8 +58,12 @@ program
 
 program
   .command("upload <pkgName>")
+  .option("-f, --full", "full name")
   .description("Upload the plugin message to plugin market.")
-  .action(async (pkgName) => {
+  .action(async (pkgName, { full }) => {
+    if (!full && !/^eoapi-/.test(pkgName)) {
+      pkgName = "eoapi-" + pkgName;
+    }
     const _path = path.join(process.cwd(), pkgName);
     const packageJson = fs.readFileSync(`${_path}/package.json`, "utf8");
     const json = JSON.parse(packageJson);
