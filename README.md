@@ -21,10 +21,7 @@ The commad will generate a folder includes base config files, let you could crea
 ## Upload
 
 ```
-eo upload <plugin name>
+eo upload <plugin package>
 ```
 
-If your plugin name format is `eoapi-foo`, of course you can input `eo upload eoapi-foo`, or you can just input `eo upload foo`, the cli will trying to search the plugin that name is `eoapi-` prefix.
-
-If your plugin name is other style that like `foo-app`, you need to add `-f` option.
-`eo upload foo-app -f`
+It will find and go inside the package directory, and upload the `package.json` to eopai market. However you need to wait until it is approved to find it in the market.
