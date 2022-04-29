@@ -1,16 +1,16 @@
 const generator = require('../utils/generator')
-const exportOpenapi = require('./export-openapi')
-const pushEolink = require('./push-eolink')
+const exportOpenapiTmpl = require('./export-openapi')
+const pushTmpl = require('./push')
 
 
 const typeMap = {
-    'feature-push': {
+    'push': {
         ...generator,
-        ...pushEolink
+        ...pushTmpl
     },
-    'feature-export': {
+    'export-openapi': {
         ...generator,
-        ...exportOpenapi
+        ...exportOpenapiTmpl
     },
 }
 
