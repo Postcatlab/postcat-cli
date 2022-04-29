@@ -5,7 +5,7 @@ const path = require("path");
 const http = require("got");
 const chalk = require("chalk");
 const { Command } = require("commander");
-const tmpl = require("./tmpl.js");
+const templates = require("./templates/");
 
 const ensureDir = (name) => {
   if (fs.existsSync(name)) {
@@ -35,8 +35,11 @@ program
   .command("generate")
   .alias("g")
   .argument("<name>", "module name")
+  .option('-t, --type <type>', 'plugin type')
   .description("create a module template.")
-  .action((name) => {
+  .action((name, options) => {
+    const tmpl = templates[options.type]
+    console.log('---log',options )
     if (!/^eoapi-/.test(name)) {
       name = "eoapi-" + name;
     }
@@ -44,6 +47,7 @@ program
     ensureDir(_path);
     fs.writeFileSync(`${_path}/package.json`, tmpl.genPackageJSON(name));
     fs.writeFileSync(`${_path}/tsconfig.json`, tmpl.genTsconfig());
+    fs.writeFileSync(`${_path}/rollup.config.ts`, tmpl.genRollupConfig());
     fs.writeFileSync(`${_path}/.gitignore`, tmpl.genGitignore());
     fs.writeFileSync(`${_path}/.npmignore`, tmpl.genNpmignore());
     fs.writeFileSync(`${_path}/README.md`, tmpl.genReadme(name));
