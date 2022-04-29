@@ -1,10 +1,12 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@types/prettier': ^2.6.0
   chalk: ^4.1.2
   commander: ^9.1.0
   got: ^11.8.3
   inquirer: ^8.2.4
+  prettier: 2.6.2
 
 dependencies:
   chalk: 4.1.2
@@ -12,7 +14,9 @@ dependencies:
   got: 11.8.3
 
 devDependencies:
+  '@types/prettier': registry.npmmirror.com/@types/prettier/2.6.0
   inquirer: registry.npmmirror.com/inquirer/8.2.4
+  prettier: registry.npmmirror.com/prettier/2.6.2
 
 packages:
 
@@ -257,6 +261,12 @@ packages:
   /wrappy/1.0.2:
     resolution: {integrity: sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=}
     dev: false
+
+  registry.npmmirror.com/@types/prettier/2.6.0:
+    resolution: {integrity: sha512-G/AdOadiZhnJp0jXCaBQU449W2h716OW/EoXeYkCytxKL06X1WCXB4DZpp8TpZ8eyIJVS1cw4lrlkkSYU21cDw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/prettier/-/prettier-2.6.0.tgz}
+    name: '@types/prettier'
+    version: 2.6.0
+    dev: true
 
   registry.npmmirror.com/ansi-escapes/4.3.2:
     resolution: {integrity: sha512-gKXj5ALrKWQLsYG9jlTRmR/xKluxHV+Z9QEwNIgCfM1/uwPMCuzVVnh5mwTd+OuBZcwSIMbqssNWRm1lE51QaQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ansi-escapes/-/ansi-escapes-4.3.2.tgz}
@@ -542,6 +552,14 @@ packages:
     name: os-tmpdir
     version: 1.0.2
     engines: {node: '>=0.10.0'}
+    dev: true
+
+  registry.npmmirror.com/prettier/2.6.2:
+    resolution: {integrity: sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/prettier/-/prettier-2.6.2.tgz}
+    name: prettier
+    version: 2.6.2
+    engines: {node: '>=10.13.0'}
+    hasBin: true
     dev: true
 
   registry.npmmirror.com/readable-stream/3.6.0:

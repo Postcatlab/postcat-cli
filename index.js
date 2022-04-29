@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const http = require("got");
 const chalk = require("chalk");
+const {prettierJS, prettierJSON, prettierTypescript,prettierYaml} = require('./utils/codeFormatter')
 const inquirer = require("inquirer");
 const { Command } = require("commander");
 const templates = require("./templates/");
@@ -47,18 +48,18 @@ program
     const generateProject = (tmpl) => {
         const _path = path.join(process.cwd(), name);
         ensureDir(_path);
-        fs.writeFileSync(`${_path}/package.json`, tmpl.genPackageJSON(name));
-        fs.writeFileSync(`${_path}/tsconfig.json`, tmpl.genTsconfig());
-        fs.writeFileSync(`${_path}/rollup.config.ts`, tmpl.genRollupConfig());
+        fs.writeFileSync(`${_path}/package.json`, prettierJSON(tmpl.genPackageJSON(name)));
+        fs.writeFileSync(`${_path}/tsconfig.json`,  prettierJSON(tmpl.genTsconfig()));
+        fs.writeFileSync(`${_path}/rollup.config.ts`, prettierTypescript(tmpl.genRollupConfig()));
         fs.writeFileSync(`${_path}/.gitignore`, tmpl.genGitignore());
         fs.writeFileSync(`${_path}/.npmignore`, tmpl.genNpmignore());
         fs.writeFileSync(`${_path}/README.md`, tmpl.genReadme(name));
         const _src = path.join(_path, "src");
         ensureDir(_src);
-        fs.writeFileSync(`${_src}/index.ts`, tmpl.genMain(name));
+        fs.writeFileSync(`${_src}/index.ts`, prettierTypescript(tmpl.genMain(name)));
         const _github = path.join(_path, ".github", "workflows");
         ensureDir(_github);
-        fs.writeFileSync(`${_github}/npm-publish.yml`, tmpl.genNpmpublish());
+        fs.writeFileSync(`${_github}/npm-publish.yml`, prettierYaml(tmpl.genNpmpublish()));
         logger.info(`Template files of module ${name} is generated.`);
     }
     if (pluginTypes.some(n => n.toLowerCase() === options.type)) {
@@ -67,6 +68,28 @@ program
     } else {
         inquirer
             .prompt([
+                {
+                    type: 'list',
+                    name: 'moduleType',
+                    message: 'Please select the type of plugin you want to create?',
+                    choices: [
+                        {
+                            name: 'Feature',
+                            value: 'Feature',
+                        },
+                        {
+                            name: 'UI',
+                            value: 'UI',
+                        },
+                        {
+                            name: 'System',
+                            value: 'System',
+                        },
+                    ],
+                    filter: function (val) {
+                        return val.toLowerCase();
+                    },
+                },
                 {
                     type: 'list',
                     name: 'type',
@@ -87,7 +110,8 @@ program
                 },
             ])
             .then(answers => {
-                const tmpl = templates[answers.type]
+                const {type, moduleType} = answers
+                const tmpl = templates[moduleType][type]
                 generateProject(tmpl)
             })
     }

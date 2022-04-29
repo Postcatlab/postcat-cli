@@ -1,17 +1,11 @@
-const generator = require('../utils/generator')
-const exportOpenapiTmpl = require('./export-openapi')
-const pushTmpl = require('./push')
+const feature = require('./features/')
+const system = require('./system/')
+const ui = require('./ui/')
 
-
-const typeMap = {
-    'push': {
-        ...generator,
-        ...pushTmpl
-    },
-    'export-openapi': {
-        ...generator,
-        ...exportOpenapiTmpl
-    },
+const moduleType = {
+    feature,
+    system,
+    ui
 }
 
-module.exports = typeMap
+module.exports = moduleType
