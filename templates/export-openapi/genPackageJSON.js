@@ -1,29 +1,21 @@
 const genPackageJSON = (name) =>
-`{
+  `{
   "name": "${name}",
-  "version": "1.0.6",
-  "description": "eoapi extension export openapi",
+  "version": "1.0.0",
+  "description": "The export extension of eoapi",
   "main": "dist/index.js",
   "moduleID": "${name}",
-  "moduleName": "export-openapi",
+  "moduleName": "${name}",
   "moduleType": "feature",
-  "logo": "https://raw.githubusercontent.com/eolinker/${name}/main/assets/openapi.png",
+  "logo": "",
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "build:watch": "rollup -w -c rollup.config.js",
-    "test": "nodemon dist/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/eolinker/${name}.git"
+    "test": ""
   },
   "keywords": [],
-  "author": "Eolink",
+  "author": "",
   "license": "Apache-2.0 License",
-  "bugs": {
-    "url": "https://github.com/eolinker/${name}/issues"
-  },
-  "homepage": "https://github.com/eolinker/${name}#readme",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.0",
     "@rollup/plugin-json": "^4.1.0",
@@ -32,7 +24,6 @@ const genPackageJSON = (name) =>
     "@types/lodash": "^4.14.182",
     "@types/node": "^17.0.29",
     "lodash": "^4.17.21",
-    "nodemon": "^2.0.15",
     "rollup": "^2.70.2",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "rollup-plugin-terser": "^7.0.2",
@@ -41,16 +32,17 @@ const genPackageJSON = (name) =>
   },
   "features": {
     "apimanager.export": {
-      "action": "export_convert_mock",
+      "action": "exportFunc",
       "label": "OpenAPI(.json)",
       "description": "Convert api data into json of openapi format",
-      "icon": "https://raw.githubusercontent.com/eolinker/${name}/main/assets/openapi.png",
+      "icon": "",
       "filename": "openapi.json"
     }
   }
 }
-` 
 
-module.exports ={
-    genPackageJSON
-}
+`;
+
+module.exports = {
+  genPackageJSON
+};
