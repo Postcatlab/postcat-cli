@@ -10,10 +10,12 @@ Now, you can use `eo xxx` command to generate、upload plugin of eoapi.
 
 ## Generate
 
-```
+```bash
 eo generate <plugin name>
 # or
 eo g <plugin name>
+# or 
+eo g <plugin name> [--type] <feature-push | feature-export-openapi>
 ```
 
 The commad will generate a folder includes base config files, let you could create any features.

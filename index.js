@@ -9,6 +9,7 @@ const inquirer = require("inquirer");
 const { Command } = require("commander");
 const templates = require("./templates/");
 
+const templateTypes = ['Feature', 'UI', 'System']
 const pluginTypes = ['Push', 'Export-Openapi']
 
 const ensureDir = (name) => {
@@ -62,8 +63,10 @@ program
         fs.writeFileSync(`${_github}/npm-publish.yml`, prettierYaml(tmpl.genNpmpublish()));
         logger.info(`Template files of module ${name} is generated.`);
     }
-    if (pluginTypes.some(n => n.toLowerCase() === options.type)) {
-        const tmpl = templates[options.type.toLowerCase()]
+    const tmplType = templateTypes.find(n => options.type?.startsWith(n.toLowerCase()))
+    const pluginType = pluginTypes.find(n => options.type?.endsWith(n.toLowerCase()))
+    if (tmplType && pluginType) {
+        const tmpl = templates[tmplType.toLowerCase()][pluginType.toLowerCase()]
         generateProject(tmpl)
     } else {
         inquirer
@@ -93,7 +96,7 @@ program
                 {
                     type: 'list',
                     name: 'type',
-                    message: 'Please select the type of plugin you want to create?',
+                    message: 'Please select the template of plugin you want to create?',
                     choices: [
                         {
                             name: 'Push',

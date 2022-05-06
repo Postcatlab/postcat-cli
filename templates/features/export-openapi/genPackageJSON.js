@@ -2,7 +2,7 @@ const genPackageJSON = (name) =>
   `{
   "name": "${name}",
   "version": "1.0.0",
-        "description": "The export extension of eoapi",
+  "description": "The export extension of eoapi",
   "main": "dist/index.js",
   "moduleID": "${name}",
   "moduleName": "${name}",
