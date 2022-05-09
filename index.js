@@ -14,8 +14,9 @@ const inquirer = require("inquirer");
 const { Command } = require("commander");
 const templates = require("./templates/");
 
-const templateTypes = ["Feature", "UI", "System"];
-const pluginTypes = ["Push", "Export-Openapi"];
+/**  */
+const pluginTypes = ["Feature", "UI", "System"];
+const featurePluginTmpls = ["Push", "Export-Openapi"];
 
 const ensureDir = (name) => {
   if (fs.existsSync(name)) {
@@ -51,6 +52,7 @@ program
     if (!/^eoapi-/.test(name)) {
       name = "eoapi-" + name;
     }
+    /**  */
     const generateProject = (tmpl) => {
       const _path = path.join(process.cwd(), name);
       ensureDir(_path);
@@ -83,14 +85,17 @@ program
       );
       logger.info(`Template files of module ${name} is generated.`);
     };
-    const tmplType = templateTypes.find((n) =>
+
+    /**  用户选择的插件类型 */
+    const pluginType = pluginTypes.find((n) =>
       options.type?.startsWith(n.toLowerCase())
     );
-    const pluginType = pluginTypes.find((n) =>
+    /** 插件类型对应的模板类型  */
+    const tmplType = featurePluginTmpls.find((n) =>
       options.type?.endsWith(n.toLowerCase())
     );
     if (tmplType && pluginType) {
-      const tmpl = templates[tmplType.toLowerCase()][pluginType.toLowerCase()];
+      const tmpl = templates[pluginType.toLowerCase()][tmplType.toLowerCase()];
       generateProject(tmpl);
     } else {
       inquirer
