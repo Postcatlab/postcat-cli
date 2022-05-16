@@ -34,7 +34,7 @@ program
     }
     const _generateProject = (tmpl) => {
       const basePath = path.join(process.cwd(), name);
-      const files = ["./index.js", "package.json"];
+      const files = ["index.js", "package.json"];
       generateProject({ tmpl, basePath, files }, name);
       logger.info(`Template files of module ${name} is generated.`);
     };

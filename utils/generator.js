@@ -168,7 +168,7 @@ const genFileMap = (tmpl, basePath) => {
 
   return new Proxy(fileMap, {
     get(target, key) {
-      ensureDir(path.posix.dirname(key));
+      ensureDir(path.dirname(key));
       return target[key];
     },
   });
