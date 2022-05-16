@@ -4,8 +4,19 @@ const fs = require("fs");
 const path = require("path");
 const http = require("got");
 const chalk = require("chalk");
+const {
+  prettierJS,
+  prettierJSON,
+  prettierTypescript,
+  prettierYaml
+} = require("./utils/codeFormatter");
+const inquirer = require("inquirer");
 const { Command } = require("commander");
-const tmpl = require("./tmpl.js");
+const templates = require("./templates/");
+
+/**  */
+const pluginTypes = ["Feature", "UI", "System"];
+const featurePluginTmpls = ["Push", "Export-Openapi"];
 
 const ensureDir = (name) => {
   if (fs.existsSync(name)) {
@@ -35,25 +46,107 @@ program
   .command("generate")
   .alias("g")
   .argument("<name>", "module name")
+  .option("-t, --type <type>", "plugin type")
   .description("create a module template.")
-  .action((name) => {
+  .action((name, options) => {
     if (!/^eoapi-/.test(name)) {
       name = "eoapi-" + name;
     }
-    const _path = path.join(process.cwd(), name);
-    ensureDir(_path);
-    fs.writeFileSync(`${_path}/package.json`, tmpl.genPackageJSON(name));
-    fs.writeFileSync(`${_path}/tsconfig.json`, tmpl.genTsconfig());
-    fs.writeFileSync(`${_path}/.gitignore`, tmpl.genGitignore());
-    fs.writeFileSync(`${_path}/.npmignore`, tmpl.genNpmignore());
-    fs.writeFileSync(`${_path}/README.md`, tmpl.genReadme(name));
-    const _src = path.join(_path, "src");
-    ensureDir(_src);
-    fs.writeFileSync(`${_src}/index.ts`, tmpl.genIndex(name));
-    const _github = path.join(_path, ".github", "workflows");
-    ensureDir(_github);
-    fs.writeFileSync(`${_github}/npm-publish.yml`, tmpl.genNpmpublish());
-    logger.info(`Template files of module ${name} is generated.`);
+    /**  */
+    const generateProject = (tmpl) => {
+      const _path = path.join(process.cwd(), name);
+      ensureDir(_path);
+      fs.writeFileSync(
+        `${_path}/package.json`,
+        prettierJSON(tmpl.genPackageJSON(name))
+      );
+      fs.writeFileSync(
+        `${_path}/tsconfig.json`,
+        prettierJSON(tmpl.genTsconfig())
+      );
+      fs.writeFileSync(
+        `${_path}/rollup.config.ts`,
+        prettierTypescript(tmpl.genRollupConfig())
+      );
+      fs.writeFileSync(`${_path}/.gitignore`, tmpl.genGitignore());
+      fs.writeFileSync(`${_path}/.npmignore`, tmpl.genNpmignore());
+      fs.writeFileSync(`${_path}/README.md`, tmpl.genReadme(name));
+      const _src = path.join(_path, "src");
+      ensureDir(_src);
+      fs.writeFileSync(
+        `${_src}/index.ts`,
+        prettierTypescript(tmpl.genMain(name))
+      );
+      const _github = path.join(_path, ".github", "workflows");
+      ensureDir(_github);
+      fs.writeFileSync(
+        `${_github}/npm-publish.yml`,
+        prettierYaml(tmpl.genNpmpublish())
+      );
+      logger.info(`Template files of module ${name} is generated.`);
+    };
+
+    /**  用户选择的插件类型 */
+    const pluginType = pluginTypes.find((n) =>
+      options.type?.startsWith(n.toLowerCase())
+    );
+    /** 插件类型对应的模板类型  */
+    const tmplType = featurePluginTmpls.find((n) =>
+      options.type?.endsWith(n.toLowerCase())
+    );
+    if (tmplType && pluginType) {
+      const tmpl = templates[pluginType.toLowerCase()][tmplType.toLowerCase()];
+      generateProject(tmpl);
+    } else {
+      inquirer
+        .prompt([
+          {
+            type: "list",
+            name: "moduleType",
+            message: "Please select the type of plugin you want to create?",
+            choices: [
+              {
+                name: "Feature",
+                value: "Feature"
+              },
+              {
+                name: "UI",
+                value: "UI"
+              },
+              {
+                name: "System",
+                value: "System"
+              }
+            ],
+            filter: function (val) {
+              return val.toLowerCase();
+            }
+          },
+          {
+            type: "list",
+            name: "type",
+            message: "Please select the template of plugin you want to create?",
+            choices: [
+              {
+                name: "Push",
+                value: "Push"
+              },
+              {
+                name: "Export-Openapi",
+                value: "Export-Openapi"
+              }
+            ],
+            filter: function (val) {
+              return val.toLowerCase();
+            }
+          }
+        ])
+        .then((answers) => {
+          const { type, moduleType } = answers;
+          const tmpl = templates[moduleType][type];
+          generateProject(tmpl);
+        });
+    }
   });
 
 program
