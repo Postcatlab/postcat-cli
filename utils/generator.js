@@ -5,7 +5,7 @@ const {
   prettierJS,
   prettierJSON,
   prettierTypescript,
-  prettierYaml,
+  prettierYaml
 } = require("./codeFormatter");
 
 const genNpmignore = () =>
@@ -169,7 +169,7 @@ const genFileMap = (tmpl, basePath) => {
     get(target, key) {
       ensureDir(path.dirname(key));
       return target[key];
-    },
+    }
   });
 };
 
@@ -190,5 +190,5 @@ module.exports = {
   genRollupConfig,
   genNpmpublish,
   genFileMap,
-  generateProject,
+  generateProject
 };

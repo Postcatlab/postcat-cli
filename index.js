@@ -15,7 +15,7 @@ const logger = {
   //   [LogTypeEnum.error]: 'red'
   // const header = chalk[this.levels[type]](`[Eo ${type.toUpperCase()}]:`)
   // console.log(header, ...messages)
-  info: (msg) => console.log(msg),
+  info: (msg) => console.log(msg)
 };
 
 const HOST = "http://106.12.149.147:3333";
@@ -60,17 +60,17 @@ program
             choices: ["Feature", "UI", "System"],
             filter: function (val) {
               return val.toLowerCase();
-            },
+            }
           },
           {
             type: "list",
             name: "type",
             message: "Please select the template of plugin you want to create?",
-            choices: ["Push", "Export-Openapi"],
+            choices: ["Push", "Export"],
             filter: function (val) {
               return val.toLowerCase();
-            },
-          },
+            }
+          }
         ])
         .then((answers) => {
           const { type, moduleType } = answers;
@@ -89,7 +89,7 @@ program
     const json = JSON.parse(packageJson);
     const { code, msg } = await http
       .post(HOST + "/upload", {
-        json: json,
+        json: json
       })
       .json();
 
@@ -106,7 +106,7 @@ program
   .action(async (name) => {
     const { code, msg } = await http
       .post(HOST + "/reliable", {
-        json: { name },
+        json: { name }
       })
       .json();
     if (code === 0) {
@@ -120,7 +120,7 @@ program
   .action(async (name) => {
     const { code, msg } = await http
       .post(HOST + "/unreliable", {
-        json: { name },
+        json: { name }
       })
       .json();
     if (code === 0) {
