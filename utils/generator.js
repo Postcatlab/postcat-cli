@@ -1,19 +1,29 @@
+const path = require("path");
+const fs = require("fs");
+const { ensureDir } = require("./file");
+const {
+  prettierJS,
+  prettierJSON,
+  prettierTypescript,
+  prettierYaml,
+} = require("./codeFormatter");
+
 const genNpmignore = () =>
-`src/
+  `src/
 node_modules/
 package-lock.json
 tsconfig.json
 .vscode/
 .travis.yml
-.idea`
+.idea`;
 const genGitignore = () =>
-`node_modules/
+  `node_modules/
 dist/
 .DS_Store
 .idea
-.vscode/`
+.vscode/`;
 const genTsconfig = () =>
-`{
+  `{
 "compilerOptions": {
 "target": "es5",
 "module": "commonjs",
@@ -26,17 +36,15 @@ const genTsconfig = () =>
 "skipLibCheck": true
 },
 "exclude": ["node_modules", "dist"]
-}`
+}`;
 const genReadme = (name) =>
-`# ${name}
+  `# ${name}
 
 This is a module of EOAPI-Core.
-`
+`;
 
-
-
-const genRollupConfig = () => 
-`
+const genRollupConfig = () =>
+  `
 import { terser } from 'rollup-plugin-terser';
 import typescript from 'rollup-plugin-typescript2';
 import commonjs from '@rollup/plugin-commonjs';
@@ -83,10 +91,10 @@ const nodeCjs = {
 const bundles = [nodeCjs];
 
 export default bundles;
-`
+`;
 
 const genNpmpublish = () =>
-`# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+  `# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
 # For more information see: https://help.github.com/actions/language-and-framework-guides/publishing-nodejs-packages
 
 name: Node.js Package
@@ -120,14 +128,67 @@ steps:
   - run: npm publish
     env:
       NODE_AUTH_TOKEN: \${{secrets.npm_token}}
-`
+`;
+const genFileMap = (tmpl, basePath) => {
+  const { join } = path;
+  const src = join(basePath, "src");
+  const githubWorkflows = join(basePath, ".github", "workflows");
+  ensureDir(basePath);
+  const getBasePath = (...rest) => join(basePath, ...rest);
+  const getSrcPath = (...rest) => join(src, ...rest);
+  const getGithubPath = (...rest) => join(githubWorkflows, ...rest);
 
+  const fileMap = {};
+
+  fileMap[getBasePath("/.gitignore")] = tmpl.genGitignore;
+
+  fileMap[getBasePath("/.npmignore")] = tmpl.genNpmignore;
+
+  fileMap[getBasePath("README.md")] = (name) => tmpl.genReadme(name);
+
+  fileMap[getBasePath("rollup.config.ts")] = () =>
+    prettierTypescript(tmpl.genRollupConfig());
+
+  fileMap[getBasePath("tsconfig.json")] = () =>
+    prettierJSON(tmpl.genTsconfig());
+
+  fileMap[getBasePath("package.json")] = (name) =>
+    prettierJSON(tmpl.genPackageJSON(name));
+
+  fileMap[getBasePath("index.js")] = (name) => prettierJS(tmpl.genMain(name));
+
+  fileMap[getSrcPath("index.js")] = (name) => prettierJS(tmpl.genMain(name));
+
+  fileMap[getSrcPath("index.ts")] = (name) =>
+    prettierTypescript(tmpl.genMain(name));
+
+  fileMap[getGithubPath("npm-publish.yml")] = () =>
+    prettierYaml(tmpl.genNpmpublish());
+
+  return new Proxy(fileMap, {
+    get(target, key) {
+      ensureDir(path.dirname(key));
+      return target[key];
+    },
+  });
+};
+
+const generateProject = ({ tmpl, basePath, files = [] }, ...args) => {
+  ensureDir(basePath);
+  const fileMap = genFileMap(tmpl, basePath);
+  files.forEach((name) => {
+    const fullPath = path.join(basePath, name);
+    fs.writeFileSync(fullPath, fileMap[fullPath](...args));
+  });
+};
 
 module.exports = {
-    genNpmignore,
-    genGitignore,
-    genTsconfig,
-    genReadme,
-    genRollupConfig,
-    genNpmpublish
-}
+  genNpmignore,
+  genGitignore,
+  genTsconfig,
+  genReadme,
+  genRollupConfig,
+  genNpmpublish,
+  genFileMap,
+  generateProject,
+};

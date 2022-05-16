@@ -1,43 +1,21 @@
 #!/usr/bin/env node
 
 const fs = require("fs");
-const fss = require("fs-extra");
 const path = require("path");
-const shell = require("shelljs");
 const http = require("got");
-const chalk = require("chalk");
-const {
-  prettierJS,
-  prettierJSON,
-  prettierTypescript,
-  prettierYaml
-} = require("./utils/codeFormatter");
 const inquirer = require("inquirer");
 const { Command } = require("commander");
 const templates = require("./templates/");
+const { generateProject } = require("./utils/generator");
 
-/**  */
-const pluginTypes = ["Feature", "UI", "System"];
-const featurePluginTmpls = ["Push", "Export"];
-
-const ensureDir = (name) => {
-  if (fs.existsSync(name)) {
-    return true;
-  } else {
-    if (ensureDir(path.dirname(name))) {
-      fs.mkdirSync(name);
-      return true;
-    }
-  }
-};
 const logger = {
-  success: chalk.green,
+  // [LogTypeEnum.success]: 'green',
   //   [LogTypeEnum.info]: 'blue',
   //   [LogTypeEnum.warn]: 'yellow',
   //   [LogTypeEnum.error]: 'red'
   // const header = chalk[this.levels[type]](`[Eo ${type.toUpperCase()}]:`)
   // console.log(header, ...messages)
-  info: (msg) => console.log(msg)
+  info: (msg) => console.log(msg),
 };
 
 const HOST = "http://106.12.149.147:3333";
@@ -54,51 +32,24 @@ program
     if (!/^eoapi-/.test(name)) {
       name = "eoapi-" + name;
     }
-    /**  */
-    const generateProject = (tmpl) => {
-      const _path = path.join(process.cwd(), name);
-      ensureDir(_path);
-      fs.writeFileSync(
-        `${_path}/package.json`,
-        prettierJSON(tmpl.genPackageJSON(name))
-      );
-      fs.writeFileSync(
-        `${_path}/tsconfig.json`,
-        prettierJSON(tmpl.genTsconfig())
-      );
-      fs.writeFileSync(
-        `${_path}/rollup.config.ts`,
-        prettierTypescript(tmpl.genRollupConfig())
-      );
-      fs.writeFileSync(`${_path}/.gitignore`, tmpl.genGitignore());
-      fs.writeFileSync(`${_path}/.npmignore`, tmpl.genNpmignore());
-      fs.writeFileSync(`${_path}/README.md`, tmpl.genReadme(name));
-      const _src = path.join(_path, "src");
-      ensureDir(_src);
-      fs.writeFileSync(
-        `${_src}/index.ts`,
-        prettierTypescript(tmpl.genMain(name))
-      );
-      const _github = path.join(_path, ".github", "workflows");
-      ensureDir(_github);
-      fs.writeFileSync(
-        `${_github}/npm-publish.yml`,
-        prettierYaml(tmpl.genNpmpublish())
-      );
+    const _generateProject = (tmpl) => {
+      const basePath = path.join(process.cwd(), name);
+      const files = ["index.js", "package.json"];
+      generateProject({ tmpl, basePath, files }, name);
       logger.info(`Template files of module ${name} is generated.`);
     };
-
+    // 用户手动输入的插件类型
+    const optionsType = options.type?.toLowerCase();
     /**  用户选择的插件类型 */
-    const pluginType = pluginTypes.find((n) =>
-      options.type?.startsWith(n.toLowerCase())
-    );
+    const pluginTypes = Object.keys(templates);
+    const pluginType = pluginTypes.find((n) => optionsType?.startsWith(n));
     /** 插件类型对应的模板类型  */
-    const tmplType = featurePluginTmpls.find((n) =>
-      options.type?.endsWith(n.toLowerCase())
-    );
-    if (tmplType && pluginType) {
-      const tmpl = templates[pluginType.toLowerCase()][tmplType.toLowerCase()];
-      generateProject(tmpl);
+    const featurePluginTmpls = Object.keys(templates[pluginType] || {});
+    const tmplType = featurePluginTmpls?.find((n) => optionsType?.endsWith(n));
+    // 如果用户手动输入了完整的参数，则跳过命令行交互，直接根据用户传的参数进行创建
+    if (options.type && tmplType && pluginType) {
+      const tmpl = templates[pluginType][tmplType];
+      _generateProject(tmpl);
     } else {
       inquirer
         .prompt([
@@ -106,47 +57,25 @@ program
             type: "list",
             name: "moduleType",
             message: "Please select the type of plugin you want to create?",
-            choices: [
-              {
-                name: "Feature",
-                value: "Feature"
-              },
-              {
-                name: "UI",
-                value: "UI"
-              },
-              {
-                name: "System",
-                value: "System"
-              }
-            ],
+            choices: ["Feature", "UI", "System"],
             filter: function (val) {
               return val.toLowerCase();
-            }
+            },
           },
           {
             type: "list",
             name: "type",
             message: "Please select the template of plugin you want to create?",
-            choices: [
-              {
-                name: "Push",
-                value: "Push"
-              },
-              {
-                name: "Export",
-                value: "Export"
-              }
-            ],
+            choices: ["Push", "Export-Openapi"],
             filter: function (val) {
               return val.toLowerCase();
-            }
-          }
+            },
+          },
         ])
         .then((answers) => {
           const { type, moduleType } = answers;
           const tmpl = templates[moduleType][type];
-          generateProject(tmpl);
+          _generateProject(tmpl);
         });
     }
   });
@@ -160,7 +89,7 @@ program
     const json = JSON.parse(packageJson);
     const { code, msg } = await http
       .post(HOST + "/upload", {
-        json: json
+        json: json,
       })
       .json();
 
@@ -177,7 +106,7 @@ program
   .action(async (name) => {
     const { code, msg } = await http
       .post(HOST + "/reliable", {
-        json: { name }
+        json: { name },
       })
       .json();
     if (code === 0) {
@@ -191,7 +120,7 @@ program
   .action(async (name) => {
     const { code, msg } = await http
       .post(HOST + "/unreliable", {
-        json: { name }
+        json: { name },
       })
       .json();
     if (code === 0) {
