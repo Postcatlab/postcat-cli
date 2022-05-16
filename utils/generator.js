@@ -155,8 +155,7 @@ const genFileMap = (tmpl, basePath) => {
   fileMap[getBasePath("package.json")] = (name) =>
     prettierJSON(tmpl.genPackageJSON(name));
 
-  fileMap[getBasePath("index.js")] = (name) =>
-      prettierJS(tmpl.genMain(name));
+  fileMap[getBasePath("index.js")] = (name) => prettierJS(tmpl.genMain(name));
 
   fileMap[getSrcPath("index.js")] = (name) => prettierJS(tmpl.genMain(name));
 
@@ -179,7 +178,7 @@ const generateProject = ({ tmpl, basePath, files = [] }, ...args) => {
   const fileMap = genFileMap(tmpl, basePath);
   files.forEach((name) => {
     const fullPath = path.join(basePath, name);
-    fs.writeFileSync(fullPath, fileMap[path.join(basePath, name)](...args));
+    fs.writeFileSync(fullPath, fileMap[fullPath](...args));
   });
 };
 
