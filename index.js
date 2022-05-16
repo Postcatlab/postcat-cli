@@ -16,7 +16,7 @@ const templates = require("./templates/");
 
 /**  */
 const pluginTypes = ["Feature", "UI", "System"];
-const featurePluginTmpls = ["Push", "Export-Openapi"];
+const featurePluginTmpls = ["Push", "Export"];
 
 const ensureDir = (name) => {
   if (fs.existsSync(name)) {
@@ -132,8 +132,8 @@ program
                 value: "Push"
               },
               {
-                name: "Export-Openapi",
-                value: "Export-Openapi"
+                name: "Export",
+                value: "Export"
               }
             ],
             filter: function (val) {
