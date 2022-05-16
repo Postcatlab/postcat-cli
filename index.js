@@ -128,4 +128,62 @@ program
     }
   });
 
+program
+  .command("debug <pkgPath>")
+  .description("Install extension from location.")
+  .action(async (pkgPath) => {
+    // * 获取 home 目录路径
+    const homePath = process.env.HOME || process.env.USERPROFILE;
+    // * 获取插件包路径
+    const filePath = path.join(process.cwd(), pkgPath);
+    // * 获取插件名
+    const { name, version } = await fss.readJson(`${filePath}/package.json`);
+    const debuggerPath = path.join(homePath, ".eo/data/debugger.json");
+    const eoModule = await fss.readJson(
+      path.join(homePath, ".eo/package.json")
+    );
+    // * 添加并写入 package.json / dependencies 配置
+    eoModule.dependencies[name] = version;
+    fss.writeJsonSync(path.join(homePath, ".eo/package.json"), eoModule);
+    fss
+      .readJson(debuggerPath)
+      .then((json) => {
+        json.extensions.push(name);
+        fss.writeJsonSync(debuggerPath, json);
+      })
+      .catch((e) => {
+        fss.writeJsonSync(debuggerPath, { extensions: [name] });
+      });
+    // * 通过链接安装到本地
+    shell.cd(`${homePath}/.eo`);
+    shell.exec(`npm link ${filePath}`);
+    logger.success("Done");
+  });
+
+program
+  .command("undebug <pkgPath>")
+  .description("Uninstall extension from location.")
+  .action(async (pkgPath) => {
+    // * 获取 home 目录路径
+    const homePath = process.env.HOME || process.env.USERPROFILE;
+    // * 获取插件包路径
+    const filePath = path.join(process.cwd(), pkgPath);
+    // * 获取插件名
+    const { name } = await fss.readJson(`${filePath}/package.json`);
+    const debuggerPath = path.join(homePath, ".eo/data/debugger.json");
+    fss
+      .readJson(debuggerPath)
+      .then((json) => {
+        json.extensions = json.extensions.filter((it) => it !== name);
+        fss.writeJsonSync(debuggerPath, json);
+      })
+      .catch((e) => {
+        fss.writeJsonSync(debuggerPath, { extensions: [] });
+      });
+    // * 通过链接安装到本地
+    shell.cd(`${homePath}/.eo`);
+    shell.exec(`npm unlink ${name}`);
+    logger.success("Done");
+  });
+
 program.parse();
