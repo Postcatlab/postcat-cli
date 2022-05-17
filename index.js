@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
-const fs = require("fs");
+const fs = require("fs-extra");
 const path = require("path");
+const shell = require("shelljs");
+const chalk = require("chalk");
 const http = require("got");
 const inquirer = require("inquirer");
 const { Command } = require("commander");
@@ -9,7 +11,7 @@ const templates = require("./templates/");
 const { generateProject } = require("./utils/generator");
 
 const logger = {
-  // [LogTypeEnum.success]: 'green',
+  success: chalk.green,
   //   [LogTypeEnum.info]: 'blue',
   //   [LogTypeEnum.warn]: 'yellow',
   //   [LogTypeEnum.error]: 'red'
@@ -85,8 +87,7 @@ program
   .description("Upload the plugin message to plugin market.")
   .action(async (pkgName) => {
     const _path = path.join(process.cwd(), pkgName);
-    const packageJson = fs.readFileSync(`${_path}/package.json`, "utf8");
-    const json = JSON.parse(packageJson);
+    const json = fs.readJson(`${_path}/package.json`);
     const { code, msg } = await http
       .post(HOST + "/upload", {
         json: json
@@ -137,22 +138,19 @@ program
     // * 获取插件包路径
     const filePath = path.join(process.cwd(), pkgPath);
     // * 获取插件名
-    const { name, version } = await fss.readJson(`${filePath}/package.json`);
+    const { name, version } = await fs.readJson(`${filePath}/package.json`);
     const debuggerPath = path.join(homePath, ".eo/data/debugger.json");
-    const eoModule = await fss.readJson(
-      path.join(homePath, ".eo/package.json")
-    );
+    const eoModule = await fs.readJson(path.join(homePath, ".eo/package.json"));
     // * 添加并写入 package.json / dependencies 配置
     eoModule.dependencies[name] = version;
-    fss.writeJsonSync(path.join(homePath, ".eo/package.json"), eoModule);
-    fss
-      .readJson(debuggerPath)
+    fs.writeJsonSync(path.join(homePath, ".eo/package.json"), eoModule);
+    fs.readJson(debuggerPath)
       .then((json) => {
         json.extensions.push(name);
-        fss.writeJsonSync(debuggerPath, json);
+        fs.writeJsonSync(debuggerPath, json);
       })
       .catch((e) => {
-        fss.writeJsonSync(debuggerPath, { extensions: [name] });
+        fs.writeJsonSync(debuggerPath, { extensions: [name] });
       });
     // * 通过链接安装到本地
     shell.cd(`${homePath}/.eo`);
@@ -169,16 +167,15 @@ program
     // * 获取插件包路径
     const filePath = path.join(process.cwd(), pkgPath);
     // * 获取插件名
-    const { name } = await fss.readJson(`${filePath}/package.json`);
+    const { name } = await fs.readJson(`${filePath}/package.json`);
     const debuggerPath = path.join(homePath, ".eo/data/debugger.json");
-    fss
-      .readJson(debuggerPath)
+    fs.readJson(debuggerPath)
       .then((json) => {
         json.extensions = json.extensions.filter((it) => it !== name);
-        fss.writeJsonSync(debuggerPath, json);
+        fs.writeJsonSync(debuggerPath, json);
       })
       .catch((e) => {
-        fss.writeJsonSync(debuggerPath, { extensions: [] });
+        fs.writeJsonSync(debuggerPath, { extensions: [] });
       });
     // * 通过链接安装到本地
     shell.cd(`${homePath}/.eo`);
