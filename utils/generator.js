@@ -5,7 +5,7 @@ const {
   prettierJS,
   prettierJSON,
   prettierTypescript,
-  prettierYaml
+  prettierYaml,
 } = require("./codeFormatter");
 
 const genNpmignore = () =>
@@ -45,52 +45,47 @@ This is a module of EOAPI-Core.
 
 const genRollupConfig = () =>
   `
-import { terser } from 'rollup-plugin-terser';
-import typescript from 'rollup-plugin-typescript2';
-import commonjs from '@rollup/plugin-commonjs';
-import json from '@rollup/plugin-json';
-import replace from '@rollup/plugin-replace';
-import resolve from '@rollup/plugin-node-resolve';
-import nodePolyfills from 'rollup-plugin-node-polyfills';
-
-const sourcemap = 'inline';
-const input = './src/index.ts';
-
-const commonOptions = {
-  plugins: [
-    typescript({
-      tsconfigOverride: {
-        compilerOptions: {
-          target: 'ES2017',
-          module: 'ES2015'
-        }
-      }
-    }),
-    terser(),
-    resolve(),
-    commonjs(),
-    nodePolyfills(),
-    json(),
-    replace({
-      preventAssignment: true
-    })
-  ],
-  input
-};
-
-/** @type import('rollup').RollupOptions */
-const nodeCjs = {
-  output: [{
-    file: 'dist/index.js',
-    format: 'cjs',
-    sourcemap
-  }],
-  ...commonOptions
-};
-
-const bundles = [nodeCjs];
-
-export default bundles;
+  import { terser } from "rollup-plugin-terser";
+  import commonjs from "@rollup/plugin-commonjs";
+  import json from "@rollup/plugin-json";
+  import replace from "@rollup/plugin-replace";
+  import resolve from "@rollup/plugin-node-resolve";
+  import nodePolyfills from "rollup-plugin-node-polyfills";
+  
+  const sourcemap = "inline";
+  const input = "./index.js";
+  
+  const commonOptions = {
+    plugins: [
+      terser(),
+      resolve(),
+      commonjs(),
+      nodePolyfills(),
+      json(),
+      replace({
+        preventAssignment: true,
+      }),
+    ],
+    input,
+  };
+  
+  /** @type import('rollup').RollupOptions */
+  const nodeCjs = {
+    output: [
+      {
+        file: "dist/index.js",
+        format: "umd",
+        name: "index",
+        sourcemap,
+      },
+    ],
+    ...commonOptions,
+  };
+  
+  const bundles = [nodeCjs];
+  
+  export default bundles;
+  
 `;
 
 const genNpmpublish = () =>
@@ -146,8 +141,8 @@ const genFileMap = (tmpl, basePath) => {
 
   fileMap[getBasePath("README.md")] = (name) => tmpl.genReadme(name);
 
-  fileMap[getBasePath("rollup.config.ts")] = () =>
-    prettierTypescript(tmpl.genRollupConfig());
+  fileMap[getBasePath("rollup.config.js")] = () =>
+    prettierJS(tmpl.genRollupConfig());
 
   fileMap[getBasePath("tsconfig.json")] = () =>
     prettierJSON(tmpl.genTsconfig());
@@ -169,7 +164,7 @@ const genFileMap = (tmpl, basePath) => {
     get(target, key) {
       ensureDir(path.dirname(key));
       return target[key];
-    }
+    },
   });
 };
 
@@ -190,5 +185,5 @@ module.exports = {
   genRollupConfig,
   genNpmpublish,
   genFileMap,
-  generateProject
+  generateProject,
 };

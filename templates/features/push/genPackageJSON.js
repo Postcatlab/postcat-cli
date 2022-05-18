@@ -3,7 +3,7 @@ const genPackageJSON = (name) =>
     name,
     version: "1.0.0",
     description: "eoapi extension for push api data to eolinker",
-    main: "index.js",
+    main: "dist/index.js",
     moduleID: name,
     moduleName: "Push to Eolink",
     moduleType: "feature",
@@ -12,6 +12,8 @@ const genPackageJSON = (name) =>
     main_debug: "",
     scripts: {
       test: "nodemon index.js",
+      build: "rollup -c rollup.config.js",
+      "build:watch": "rollup -w -c rollup.config.js",
     },
     type: "module",
     repository: {
@@ -27,6 +29,13 @@ const genPackageJSON = (name) =>
     homepage: `https://github.com/eolinker/${name}#readme`,
     dependencies: {
       ky: "^0.30.0",
+      "@rollup/plugin-commonjs": "^22.0.0",
+      "@rollup/plugin-json": "^4.1.0",
+      "@rollup/plugin-node-resolve": "^13.2.1",
+      "@rollup/plugin-replace": "^4.0.0",
+      rollup: "^2.70.2",
+      "rollup-plugin-node-polyfills": "^0.2.1",
+      "rollup-plugin-terser": "^7.0.2",
     },
     devDependencies: {
       nodemon: "^2.0.15",

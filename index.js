@@ -17,7 +17,7 @@ const logger = {
   //   [LogTypeEnum.error]: 'red'
   // const header = chalk[this.levels[type]](`[Eo ${type.toUpperCase()}]:`)
   // console.log(header, ...messages)
-  info: (msg) => console.log(msg)
+  info: (msg) => console.log(msg),
 };
 
 const HOST = "http://market.eoapi.io";
@@ -36,7 +36,7 @@ program
     }
     const _generateProject = (tmpl) => {
       const basePath = path.join(process.cwd(), name);
-      const files = ["index.js", "package.json"];
+      const files = ["index.js", "package.json", "rollup.config.js"];
       generateProject({ tmpl, basePath, files }, name);
       logger.info(`Template files of module ${name} is generated.`);
     };
@@ -62,7 +62,7 @@ program
             choices: ["Feature", "UI", "System"],
             filter: function (val) {
               return val.toLowerCase();
-            }
+            },
           },
           {
             type: "list",
@@ -71,8 +71,8 @@ program
             choices: ["Push", "Export"],
             filter: function (val) {
               return val.toLowerCase();
-            }
-          }
+            },
+          },
         ])
         .then((answers) => {
           const { type, moduleType } = answers;
@@ -90,7 +90,7 @@ program
     const json = fs.readJson(`${_path}/package.json`);
     const { code, msg } = await http
       .post(HOST + "/upload", {
-        json: json
+        json: json,
       })
       .json();
 
@@ -107,7 +107,7 @@ program
   .action(async (name) => {
     const { code, msg } = await http
       .post(HOST + "/reliable", {
-        json: { name }
+        json: { name },
       })
       .json();
     if (code === 0) {
@@ -121,7 +121,7 @@ program
   .action(async (name) => {
     const { code, msg } = await http
       .post(HOST + "/unreliable", {
-        json: { name }
+        json: { name },
       })
       .json();
     if (code === 0) {
