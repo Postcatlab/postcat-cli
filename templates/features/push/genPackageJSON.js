@@ -7,7 +7,7 @@ const genPackageJSON = (name) =>
     moduleID: name,
     moduleName: "Push to Eolink",
     moduleType: "feature",
-    logo: `https://raw.githubusercontent.com/eolinker/${name}/main/assets/logo.png`,
+    logo: `https://s3.bmp.ovh/imgs/2022/05/18/d8d200e3dc050831.png`,
     main_node: "",
     main_debug: "",
     scripts: {

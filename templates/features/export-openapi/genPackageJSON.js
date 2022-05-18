@@ -7,7 +7,7 @@ const genPackageJSON = (name) =>
     moduleID: name,
     moduleName: name,
     moduleType: "feature",
-    logo: "",
+    logo: "https://s3.bmp.ovh/imgs/2022/05/18/d8d200e3dc050831.png",
     scripts: {
       build: "rollup -c rollup.config.js",
       "build:watch": "rollup -w -c rollup.config.js",
