@@ -1,6 +1,6 @@
 {
   "name": "@eoapi/cli",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "",
   "main": "index.js",
   "bin": {
@@ -22,11 +22,9 @@
     "commander": "^9.1.0",
     "fs-extra": "^10.1.0",
     "got": "^11.8.3",
-    "shelljs": "^0.8.5"
-  },
-  "devDependencies": {
-    "@types/prettier": "^2.6.0",
+    "shelljs": "^0.8.5",
     "inquirer": "^8.2.4",
+    "@types/prettier": "^2.6.0",
     "prettier": "2.6.2"
   }
 }
