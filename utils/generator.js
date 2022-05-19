@@ -45,41 +45,17 @@ This is a module of EOAPI-Core.
 
 const genRollupConfig = () =>
   `
-  import { terser } from "rollup-plugin-terser";
-  import commonjs from "@rollup/plugin-commonjs";
-  import json from "@rollup/plugin-json";
-  import replace from "@rollup/plugin-replace";
-  import resolve from "@rollup/plugin-node-resolve";
-  import nodePolyfills from "rollup-plugin-node-polyfills";
-  
-  const sourcemap = "inline";
-  const input = "./index.js";
-  
-  const commonOptions = {
-    plugins: [
-      terser(),
-      resolve(),
-      commonjs(),
-      nodePolyfills(),
-      json(),
-      replace({
-        preventAssignment: true,
-      }),
-    ],
-    input,
-  };
-  
   /** @type import('rollup').RollupOptions */
   const nodeCjs = {
+    input: "./index.js",
     output: [
       {
         file: "dist/index.js",
         format: "umd",
         name: "index",
-        sourcemap,
+        sourcemap: "inline",
       },
     ],
-    ...commonOptions,
   };
   
   const bundles = [nodeCjs];
