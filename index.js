@@ -59,7 +59,8 @@ program
             type: "list",
             name: "moduleType",
             message: "Please select the type of plugin you want to create?",
-            choices: ["Feature", "UI", "System"],
+            // choices: ["Feature", "UI", "System"],
+            choices: ["Feature"],
             filter: function (val) {
               return val.toLowerCase();
             },
