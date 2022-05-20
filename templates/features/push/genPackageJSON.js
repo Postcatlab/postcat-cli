@@ -17,7 +17,7 @@ const genPackageJSON = (name) =>
       rollup: "^2.70.2",
     },
     features: {
-      "apimanager.sync": {
+      "apimanage.sync": {
         action: "sync_to_remote",
         label: "EoLink",
         description: "Push API data to eolink.",

@@ -17,7 +17,7 @@ const genPackageJSON = (name) =>
       rollup: "^2.70.2",
     },
     features: {
-      "apimanager.export": {
+      "apimanage.export": {
         action: "exportFunc",
         label: "OpenAPI(.json)",
         description: "Convert api data into json of openapi format",
