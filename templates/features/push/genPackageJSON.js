@@ -25,6 +25,28 @@ const genPackageJSON = (name) =>
         extestion: "",
       },
     },
+    contributes: {
+      configuration: {
+        type: "object",
+        title: "Push",
+        properties: {
+          "eolink.remoteServer.url": {
+            type: "string",
+            required: true,
+            default: "http://127.0.0.1",
+            label: "远程服务器地址",
+            description: "",
+          },
+          "eolink.remoteServer.token": {
+            type: "string",
+            required: false,
+            default: "XXXXXXXX",
+            label: "Token",
+            description: "",
+          },
+        },
+      },
+    },
   });
 
 module.exports = {
