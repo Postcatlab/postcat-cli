@@ -11,7 +11,6 @@ const genPackageJSON = (name) =>
     scripts: {
       build: "rollup -c rollup.config.js",
       "build:watch": "rollup -w -c rollup.config.js",
-      test: "",
     },
     devDependencies: {
       rollup: "^2.70.2",
@@ -19,10 +18,10 @@ const genPackageJSON = (name) =>
     features: {
       "apimanage.export": {
         action: "exportFunc",
-        label: "OpenAPI(.json)",
-        description: "Convert api data into json of openapi format",
+        label: "Data(.json)",
+        description: "",
         icon: "",
-        filename: "openapi.json",
+        filename: "data.json",
       },
     },
   });
