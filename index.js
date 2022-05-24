@@ -17,10 +17,11 @@ const logger = {
   //   [LogTypeEnum.error]: 'red'
   // const header = chalk[this.levels[type]](`[Eo ${type.toUpperCase()}]:`)
   // console.log(header, ...messages)
-  info: (msg) => console.log(msg),
+  info: (msg) => console.log(msg)
 };
 
-const HOST = "http://market.eoapi.io";
+// const HOST = "http://106.12.149.147:3333";
+const HOST = "http://localhost:3333";
 
 const program = new Command();
 
@@ -63,7 +64,7 @@ program
             choices: ["Feature"],
             filter: function (val) {
               return val.toLowerCase();
-            },
+            }
           },
           {
             type: "list",
@@ -72,8 +73,8 @@ program
             choices: ["Push", "Export"],
             filter: function (val) {
               return val.toLowerCase();
-            },
-          },
+            }
+          }
         ])
         .then((answers) => {
           const { type, moduleType } = answers;
@@ -88,10 +89,11 @@ program
   .description("Upload the plugin message to plugin market.")
   .action(async (pkgName) => {
     const _path = path.join(process.cwd(), pkgName);
-    const json = fs.readJson(`${_path}/package.json`);
+    const json = fs.readJsonSync(`${_path}/package.json`);
+    console.log(json);
     const { code, msg } = await http
       .post(HOST + "/upload", {
-        json: json,
+        json
       })
       .json();
 
@@ -108,7 +110,7 @@ program
   .action(async (name) => {
     const { code, msg } = await http
       .post(HOST + "/reliable", {
-        json: { name },
+        json: { name }
       })
       .json();
     if (code === 0) {
@@ -122,7 +124,7 @@ program
   .action(async (name) => {
     const { code, msg } = await http
       .post(HOST + "/unreliable", {
-        json: { name },
+        json: { name }
       })
       .json();
     if (code === 0) {
