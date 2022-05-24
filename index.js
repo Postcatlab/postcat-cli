@@ -20,8 +20,8 @@ const logger = {
   info: (msg) => console.log(msg)
 };
 
-// const HOST = "http://106.12.149.147:3333";
-const HOST = "http://localhost:3333";
+const HOST = "http://106.12.149.147:3333";
+// const HOST = "http://localhost:3333";
 
 const program = new Command();
 
