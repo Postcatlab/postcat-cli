@@ -90,7 +90,6 @@ program
   .action(async (pkgName) => {
     const _path = path.join(process.cwd(), pkgName);
     const json = fs.readJsonSync(`${_path}/package.json`);
-    console.log(json);
     const { code, msg } = await http
       .post(HOST + "/upload", {
         json
