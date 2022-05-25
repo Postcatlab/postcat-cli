@@ -5,7 +5,7 @@ const {
   prettierJS,
   prettierJSON,
   prettierTypescript,
-  prettierYaml,
+  prettierYaml
 } = require("./codeFormatter");
 
 const genNpmignore = () =>
@@ -64,42 +64,6 @@ const genRollupConfig = () =>
   
 `;
 
-const genNpmpublish = () =>
-  `# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
-# For more information see: https://help.github.com/actions/language-and-framework-guides/publishing-nodejs-packages
-
-name: Node.js Package
-
-on:
-release:
-types: [created]
-
-jobs:
-build:
-runs-on: ubuntu-latest
-steps:
-  - uses: actions/checkout@v2
-  - uses: actions/setup-node@v2
-    with:
-      node-version: 16
-  - run: npm ci
-  - run: npm test
-
-publish-npm:
-needs: build
-runs-on: ubuntu-latest
-steps:
-  - uses: actions/checkout@v2
-  - uses: actions/setup-node@v2
-    with:
-      node-version: 16
-      registry-url: https://registry.npmjs.org/
-  - run: npm ci
-  - run: npm run build
-  - run: npm publish
-    env:
-      NODE_AUTH_TOKEN: \${{secrets.npm_token}}
-`;
 const genFileMap = (tmpl, basePath) => {
   const { join } = path;
   const src = join(basePath, "src");
@@ -133,14 +97,11 @@ const genFileMap = (tmpl, basePath) => {
   fileMap[getSrcPath("index.ts")] = (name) =>
     prettierTypescript(tmpl.genMain(name));
 
-  fileMap[getGithubPath("npm-publish.yml")] = () =>
-    prettierYaml(tmpl.genNpmpublish());
-
   return new Proxy(fileMap, {
     get(target, key) {
       ensureDir(path.dirname(key));
       return target[key];
-    },
+    }
   });
 };
 
@@ -159,7 +120,6 @@ module.exports = {
   genTsconfig,
   genReadme,
   genRollupConfig,
-  genNpmpublish,
   genFileMap,
-  generateProject,
+  generateProject
 };
