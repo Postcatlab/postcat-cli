@@ -1,16 +1,21 @@
 const generator = require("../../utils/generator");
-const exportOpenapiTmpl = require("../features/export");
+const exportTmpl = require("../features/export");
 const pushTmpl = require("../features/push");
+const importTmpl = require("../features/import");
 
 const feature = {
   push: {
     ...generator,
-    ...pushTmpl,
+    ...pushTmpl
   },
   export: {
     ...generator,
-    ...exportOpenapiTmpl,
+    ...exportTmpl
   },
+  import: {
+    ...generator,
+    ...importTmpl
+  }
 };
 
 module.exports = feature;

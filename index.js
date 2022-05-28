@@ -70,7 +70,7 @@ program
             type: 'list',
             name: 'type',
             message: 'Please select the template of plugin you want to create?',
-            choices: ['Push', 'Export'],
+            choices: ['Push', 'Export', 'Import'],
             filter: function (val) {
               return val.toLowerCase()
             },
