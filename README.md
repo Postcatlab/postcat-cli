@@ -35,3 +35,14 @@ eo debug <plugin package>
 ```
 
 The command will create a link between eoapi with your extension. It seems like install your extension from the market, but you don't need to upload the extension. We are also planning to support hot-update.
+
+# Cli Development
+
+```
+pnpm link --global
+```
+or
+```
+npm pack
+npm i -g eoapi-cli-${version}.tgz
+```
