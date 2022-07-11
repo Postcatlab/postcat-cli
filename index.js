@@ -21,8 +21,8 @@ const logger = {
 };
 
 // const HOST = "http://market.eoapi.io";
-// const HOST = "http://106.12.149.147";
-const HOST = "http://localhost:80";
+const HOST = "http://106.12.149.147";
+// const HOST = "http://localhost:80";
 
 const program = new Command();
 
