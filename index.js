@@ -166,7 +166,7 @@ program
     const debuggerPath = path.join(homePath, ".eo/data/debugger.json");
     fs.readJson(debuggerPath)
       .then((json) => {
-        json.extensions = json.extensions.filter((it) => it !== name);
+        json.extensions = json.extensions?.filter((it) => it !== name);
         fs.writeJsonSync(debuggerPath, json);
       })
       .catch((e) => {
@@ -174,7 +174,7 @@ program
       });
     // * 通过链接安装到本地
     shell.cd(`${homePath}/.eo`);
-    shell.exec(`npm unlink ${name}`);
+    shell.exec(`npm uninstall ${name}`);
     logger.success("Done");
   });
 
