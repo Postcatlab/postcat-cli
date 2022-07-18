@@ -22,7 +22,7 @@ const logger = {
 
 // const HOST = "http://market.eoapi.io";
 const HOST = "http://106.12.149.147";
-// const HOST = "http://localhost:3333";
+// const HOST = "http://localhost:80";
 
 const program = new Command();
 
@@ -91,6 +91,24 @@ program
   .action(async (pkgName) => {
     const _path = path.join(process.cwd(), pkgName);
     const json = fs.readJsonSync(`${_path}/package.json`);
+    if (json.features?.i18n) {
+      let langs = [
+        json.features.i18n.sourceLocale,
+        ...json.features.i18n.locales
+      ];
+      json.i18n = [];
+      langs.forEach((lang) => {
+        if (!lang) return;
+        try {
+          json.i18n.push({
+            locale: lang,
+            package: fs.readJsonSync(`${_path}/i18n/${lang}.json`)
+          });
+        } catch (e) {
+          console.log("read i18n error:", e);
+        }
+      });
+    }
     const { code, msg } = await http
       .post(HOST + "/upload", {
         json
@@ -102,34 +120,6 @@ program
       return;
     }
     console.log("🥂", msg);
-  });
-
-program
-  .command("reliable <name>")
-  .description("reliable the plugin.")
-  .action(async (name) => {
-    const { code, msg } = await http
-      .post(HOST + "/reliable", {
-        json: { name }
-      })
-      .json();
-    if (code === 0) {
-      console.log("🥂", msg);
-    }
-  });
-
-program
-  .command("unreliable <name>")
-  .description("unreliable the plugin.")
-  .action(async (name) => {
-    const { code, msg } = await http
-      .post(HOST + "/unreliable", {
-        json: { name }
-      })
-      .json();
-    if (code === 0) {
-      console.log("🥂", msg);
-    }
   });
 
 program
