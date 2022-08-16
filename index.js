@@ -5,6 +5,7 @@ const path = require("path");
 const shell = require("shelljs");
 const chalk = require("chalk");
 const http = require("got");
+const packageJson = require("./package.json");
 const inquirer = require("inquirer");
 const { Command } = require("commander");
 const templates = require("./templates/");
@@ -25,6 +26,7 @@ const HOST = "http://106.12.149.147";
 // const HOST = "http://localhost:80";
 
 const program = new Command();
+program.version(packageJson.version);
 
 program
   .command("generate")
