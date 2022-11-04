@@ -4,9 +4,6 @@ const genPackageJSON = (name) =>
     version: "1.0.0",
     description: "eoapi extension for push api data to eolinker",
     main: "dist/index.js",
-    moduleID: name,
-    moduleName: "Push to Eolink",
-    moduleType: "feature",
     logo: `https://s3.bmp.ovh/imgs/2022/05/18/d8d200e3dc050831.png`,
     scripts: {
       build: "rollup -c rollup.config.js",
@@ -17,7 +14,7 @@ const genPackageJSON = (name) =>
       rollup: "^2.70.2",
     },
     features: {
-      "apimanage.sync": {
+      syncAPI: {
         action: "sync_to_remote",
         label: "EoLink",
         description: "Push API data to eolink.",
