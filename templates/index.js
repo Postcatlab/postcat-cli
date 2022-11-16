@@ -1,11 +1,21 @@
-const feature = require('./features/')
-const system = require('./system/')
-const ui = require('./ui/')
+const generator = require('../utils/generator')
+const exportTmpl = require('./export')
+const pushTmpl = require('./push')
+const importTmpl = require('./import')
 
-const moduleType = {
-    feature,
-    system,
-    ui
+const type = {
+  push: {
+    ...generator,
+    ...pushTmpl,
+  },
+  export: {
+    ...generator,
+    ...exportTmpl,
+  },
+  import: {
+    ...generator,
+    ...importTmpl,
+  },
 }
 
-module.exports = moduleType
+module.exports = type
