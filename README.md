@@ -6,16 +6,16 @@
 npm install -g @postcat/cli
 ```
 
-Now, you can use `pc xxx` command to generate、upload plugin of postcat.
+Now, you can use `pcex xxx` command to generate、upload plugin of postcat.
 
 ## Generate
 
 ```bash
-pc generate <plugin name>
+pcex generate <plugin name>
 # or
-pc g <plugin name>
+pcex g <plugin name>
 # or
-pc g <plugin name> [--type] <feature-push | feature-export>
+pcex g <plugin name> [--type] <feature-push | feature-export>
 ```
 
 The commad will generate a folder includes base config files, let you could create any features.
@@ -23,7 +23,7 @@ The commad will generate a folder includes base config files, let you could crea
 ## Upload
 
 ```
-pc upload <plugin package>
+pcex upload <plugin package>
 ```
 
 It will find and go inside the package directory, and upload the `package.json` to postcat market. However you need to wait until it is approved to find it in the market.
@@ -31,7 +31,7 @@ It will find and go inside the package directory, and upload the `package.json` 
 ## Debug
 
 ```
-pc debug <plugin package>
+pcex debug <plugin package>
 ```
 
 The command will create a link between postcat with your extension. It seems like install your extension from the market, but you don't need to upload the extension. We are also planning to support hot-update.
@@ -41,7 +41,9 @@ The command will create a link between postcat with your extension. It seems lik
 ```
 pnpm link --global
 ```
+
 or
+
 ```
 npm pack
 npm i -g postcat-cli-${version}.tgz
