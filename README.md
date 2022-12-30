@@ -46,5 +46,5 @@ or
 
 ```
 npm pack
-npm i -g postcat-cli-${version}.tgz
+npm i --location=global postcat-cli-${version}.tgz
 ```
