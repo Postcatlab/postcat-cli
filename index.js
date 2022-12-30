@@ -18,12 +18,12 @@ const logger = {
   //   [LogTypeEnum.error]: 'red'
   // const header = chalk[this.levels[type]](`[Eo ${type.toUpperCase()}]:`)
   // console.log(header, ...messages)
-  info: (msg) => console.log(msg),
+  info: (msg) => console.log(msg)
 };
 
 // const HOST = "http://market.eoapi.io";
 const getHost = (isTest = false) =>
-  isTest ? "http://8.219.85.124:5000" : "http://106.12.149.147";
+  isTest ? "http://8.219.85.124:5000" : "https://extensions.postcat.com";
 // const HOST = "http://localhost:80";
 
 const program = new Command();
@@ -67,8 +67,8 @@ program
             choices: ["Push", "Export", "Import"],
             filter: function (val) {
               return val.toLowerCase();
-            },
-          },
+            }
+          }
         ])
         .then((answers) => {
           const { type } = answers;
@@ -88,7 +88,7 @@ program
     if (json.features?.i18n) {
       let langs = [
         json.features.i18n.sourceLocale,
-        ...json.features.i18n.locales,
+        ...json.features.i18n.locales
       ];
       json.i18n = [];
       langs.forEach((lang) => {
@@ -96,7 +96,7 @@ program
         try {
           json.i18n.push({
             locale: lang,
-            package: fs.readJsonSync(`${_path}/i18n/${lang}.json`),
+            package: fs.readJsonSync(`${_path}/i18n/${lang}.json`)
           });
         } catch (e) {
           console.log("read i18n error:", e);
@@ -105,7 +105,7 @@ program
     }
     const { code, msg } = await http
       .post(getHost(options.test) + "/upload", {
-        json,
+        json
       })
       .json();
 
