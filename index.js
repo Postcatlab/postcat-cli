@@ -18,12 +18,11 @@ const logger = {
   //   [LogTypeEnum.error]: 'red'
   // const header = chalk[this.levels[type]](`[Eo ${type.toUpperCase()}]:`)
   // console.log(header, ...messages)
-  info: (msg) => console.log(msg)
+  info: (msg) => console.log(msg),
 };
 
 // const HOST = "http://market.eoapi.io";
-const getHost = (isTest = false) =>
-  isTest ? "http://8.219.85.124:5000" : "https://extensions.postcat.com";
+const getHost = (isTest = false) => (isTest ? "http://8.219.85.124:5000" : "https://extensions.postcat.com");
 // const HOST = "http://localhost:80";
 
 const program = new Command();
@@ -36,8 +35,8 @@ program
   .option("-t, --type <type>", "plugin type")
   .description("create a module template.")
   .action((name, options) => {
-    if (!/^eoapi-/.test(name)) {
-      name = "eoapi-" + name;
+    if (!/^postcat-/.test(name)) {
+      name = "postcat-" + name;
     }
     const _generateProject = (tmpl) => {
       const basePath = path.join(process.cwd(), name);
@@ -67,8 +66,8 @@ program
             choices: ["Push", "Export", "Import"],
             filter: function (val) {
               return val.toLowerCase();
-            }
-          }
+            },
+          },
         ])
         .then((answers) => {
           const { type } = answers;
@@ -86,17 +85,14 @@ program
     const _path = path.join(process.cwd(), pkgName);
     const json = fs.readJsonSync(`${_path}/package.json`);
     if (json.features?.i18n) {
-      let langs = [
-        json.features.i18n.sourceLocale,
-        ...json.features.i18n.locales
-      ];
+      let langs = [json.features.i18n.sourceLocale, ...json.features.i18n.locales];
       json.i18n = [];
       langs.forEach((lang) => {
         if (!lang) return;
         try {
           json.i18n.push({
             locale: lang,
-            package: fs.readJsonSync(`${_path}/i18n/${lang}.json`)
+            package: fs.readJsonSync(`${_path}/i18n/${lang}.json`),
           });
         } catch (e) {
           console.log("read i18n error:", e);
@@ -105,7 +101,7 @@ program
     }
     const { code, msg } = await http
       .post(getHost(options.test) + "/upload", {
-        json
+        json,
       })
       .json();
 
@@ -126,11 +122,11 @@ program
     const filePath = path.join(process.cwd(), pkgPath);
     // * 获取插件名
     const { name, version } = await fs.readJson(`${filePath}/package.json`);
-    const debuggerPath = path.join(homePath, ".eo/data/debugger.json");
-    const eoModule = await fs.readJson(path.join(homePath, ".eo/package.json"));
+    const debuggerPath = path.join(homePath, ".postcat/debugger.json");
+    const pcModule = await fs.readJson(path.join(homePath, ".postcat/package.json"));
     // * 添加并写入 package.json / dependencies 配置
-    eoModule.dependencies[name] = version;
-    fs.writeJsonSync(path.join(homePath, ".eo/package.json"), eoModule);
+    pcModule.dependencies[name] = version;
+    fs.writeJsonSync(path.join(homePath, ".postcat/package.json"), pcModule);
     fs.readJson(debuggerPath)
       .then((json) => {
         if (!json.extensions.includes(name)) {
@@ -142,7 +138,7 @@ program
         fs.writeJsonSync(debuggerPath, { extensions: [name] });
       });
     // * 通过链接安装到本地
-    shell.cd(`${homePath}/.eo`);
+    shell.cd(`${homePath}/.postcat`);
     shell.exec(`npm install ${filePath}`);
     logger.success("Done");
   });
@@ -157,7 +153,7 @@ program
     const filePath = path.join(process.cwd(), pkgPath);
     // * 获取插件名
     const { name } = await fs.readJson(`${filePath}/package.json`);
-    const debuggerPath = path.join(homePath, ".eo/data/debugger.json");
+    const debuggerPath = path.join(homePath, ".postcat/debugger.json");
     fs.readJson(debuggerPath)
       .then((json) => {
         json.extensions = json.extensions?.filter((it) => it !== name);
@@ -167,7 +163,7 @@ program
         fs.writeJsonSync(debuggerPath, { extensions: [] });
       });
     // * 通过链接安装到本地
-    shell.cd(`${homePath}/.eo`);
+    shell.cd(`${homePath}/.postcat`);
     shell.exec(`npm uninstall ${name}`);
     logger.success("Done");
   });

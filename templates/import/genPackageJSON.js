@@ -2,7 +2,8 @@ const genPackageJSON = (name) =>
   JSON.stringify({
     name,
     version: "1.0.0",
-    description: "The import extension of eoapi",
+    description: "The import extension of postcat",
+    title:"Import to Postcat",
     main: "dist/index.js",
     logo: "https://s3.bmp.ovh/imgs/2022/05/18/d8d200e3dc050831.png",
     scripts: {
@@ -17,8 +18,7 @@ const genPackageJSON = (name) =>
         action: "importFunc",
         label: "Data(.json)",
         description: "",
-        icon: "",
-        filename: "data.json",
+        icon: ""
       },
     },
   });

@@ -1,21 +1,21 @@
-# EO CLI
+# PC CLI
 
 ## Installion
 
 ```
-npm install -g @eoapi/cli
+npm install -g @postcat/cli
 ```
 
-Now, you can use `eo xxx` command to generate、upload plugin of eoapi.
+Now, you can use `pc xxx` command to generate、upload plugin of postcat.
 
 ## Generate
 
 ```bash
-eo generate <plugin name>
+pc generate <plugin name>
 # or
-eo g <plugin name>
+pc g <plugin name>
 # or
-eo g <plugin name> [--type] <feature-push | feature-export>
+pc g <plugin name> [--type] <feature-push | feature-export>
 ```
 
 The commad will generate a folder includes base config files, let you could create any features.
@@ -23,18 +23,18 @@ The commad will generate a folder includes base config files, let you could crea
 ## Upload
 
 ```
-eo upload <plugin package>
+pc upload <plugin package>
 ```
 
-It will find and go inside the package directory, and upload the `package.json` to eopai market. However you need to wait until it is approved to find it in the market.
+It will find and go inside the package directory, and upload the `package.json` to postcat market. However you need to wait until it is approved to find it in the market.
 
 ## Debug
 
 ```
-eo debug <plugin package>
+pc debug <plugin package>
 ```
 
-The command will create a link between eoapi with your extension. It seems like install your extension from the market, but you don't need to upload the extension. We are also planning to support hot-update.
+The command will create a link between postcat with your extension. It seems like install your extension from the market, but you don't need to upload the extension. We are also planning to support hot-update.
 
 # Cli Development
 
@@ -44,5 +44,5 @@ pnpm link --global
 or
 ```
 npm pack
-npm i -g eoapi-cli-${version}.tgz
+npm i -g postcat-cli-${version}.tgz
 ```

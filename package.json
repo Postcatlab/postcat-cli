@@ -1,18 +1,17 @@
 {
-  "name": "@eoapi/cli",
-  "version": "1.2.0",
+  "name": "@postcat/cli",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "bin": {
-    "eo": "index.js"
+    "pcex": "index.js"
   },
   "scripts": {},
   "keywords": [
-    "eolinker",
-    "eoapi",
+    "postcat",
     "cli"
   ],
-  "author": "eolink",
+  "author": "Postcat",
   "license": "ISC",
   "engines": {
     "node": ">=14.16"

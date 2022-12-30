@@ -1,15 +1,15 @@
 const genPackageJSON = (name) =>
   JSON.stringify({
     name,
+    title:"Push to EoLink",
     version: "1.0.0",
-    description: "eoapi extension for push api data to eolinker",
+    description: "postcat extension for push api data to other program",
     main: "dist/index.js",
     logo: `https://s3.bmp.ovh/imgs/2022/05/18/d8d200e3dc050831.png`,
     scripts: {
       build: "rollup -c rollup.config.js",
       "build:watch": "rollup -w -c rollup.config.js",
     },
-    type: "module",
     dependencies: {
       rollup: "^2.70.2",
     },
@@ -27,13 +27,6 @@ const genPackageJSON = (name) =>
         type: "object",
         title: "Push",
         properties: {
-          "eolink.remoteServer.url": {
-            type: "string",
-            required: true,
-            default: "http://127.0.0.1",
-            label: "远程服务器地址",
-            description: "",
-          },
           "eolink.remoteServer.token": {
             type: "string",
             required: false,
